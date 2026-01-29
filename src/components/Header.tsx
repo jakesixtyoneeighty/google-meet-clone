@@ -3,11 +3,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
-  Settings,
-  HelpCircle,
-  MessageSquareWarning,
-  LayoutGrid,
-  ChevronDown,
+
   Shield
 } from 'lucide-react';
 
@@ -55,19 +51,13 @@ const Header = ({ navItems = true }: HeaderProps) => {
                   <IconButton title="Admin Panel" icon={<Shield size={20} />} />
                 </Link>
               )}
-              <IconButton title="Support" icon={<HelpCircle size={20} />} />
-              <IconButton title="Report a problem" icon={<MessageSquareWarning size={20} />} />
-              <IconButton title="Settings" icon={<Settings size={20} />} />
+
             </div>
           </>
         )}
 
         <div className="flex items-center gap-4 pl-2">
-          {navItems && (
-            <div className="hidden sm:block">
-              <IconButton title="Apps" icon={<LayoutGrid size={20} />} />
-            </div>
-          )}
+
           <div
             className={clsx(
               'flex items-center gap-3',
