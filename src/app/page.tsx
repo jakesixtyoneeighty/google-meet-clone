@@ -87,13 +87,13 @@ const Home = () => {
           <div className="flex flex-col items-start text-left space-y-8">
             <div className="space-y-4">
               <h1 className="text-6xl md:text-7xl font-extrabold tracking-tighter leading-tight text-gradient">
-                A place to go live <br />
-                without <br />
-                <span className="text-nj-red">having to wear clothes.</span>
+                Go Live. <br />
+                Clothing <br />
+                <span className="text-nj-red">Optional.</span>
               </h1>
               <p className="text-xl text-nj-grey-400 max-w-lg leading-relaxed">
-                NakedJake Live is a small, independent streaming space for the anti-clothing crowd.
-                Music, tech, conversations, life, experiments — whatever’s happening right now.
+                NakedJake Live is a small, independent streaming space for casual nudist hangouts.
+Music, tech, conversations, life, experiments — whatever’s happening right now.
               </p>
             </div>
 
@@ -109,7 +109,7 @@ const Home = () => {
               ) : isSignedIn ? (
                 <div className="flex items-center gap-2 px-4 py-3 rounded-lg bg-nj-grey-900/50 border border-nj-grey-800">
                   <span className="text-nj-grey-400 text-sm">
-                    Join stream using a code below
+                    Got an invite or a link? Drop it here.
                   </span>
                 </div>
               ) : (
@@ -165,8 +165,8 @@ const Home = () => {
                 className="rounded-lg object-cover w-full h-full hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute bottom-6 left-6 right-6 glass-card p-6 bg-black/60 border-white/10 backdrop-blur-md">
-                <h3 className="text-xl font-bold mb-1 text-white tracking-tight">Chill hangs, Naked people</h3>
-                <p className="text-sm text-nj-grey-300">Created for Nudist Online meetups and chats.</p>
+                <h3 className="text-xl font-bold mb-1 text-white tracking-tight">Chill hangs. Naked people.</h3>
+                <p className="text-sm text-nj-grey-300">A relaxed space for nudist meetups and real conversations.</p>
               </div>
             </div>
           </div>
