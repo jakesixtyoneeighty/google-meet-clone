@@ -18,6 +18,7 @@ import { usePermissions } from '@/hooks/usePermissions';
 import { AppContext, MEETING_ID_REGEX } from '@/contexts/AppProvider';
 import Header from '@/components/Header';
 import TextField from '@/components/TextField';
+import LearnMoreModal from '@/components/LearnMoreModal';
 
 const generateMeetingId = () => {
   const alphabet = 'abcdefghijklmnopqrstuvwxyz';
@@ -34,6 +35,7 @@ const Home = () => {
   const [code, setCode] = useState('');
   const [checkingCode, setCheckingCode] = useState(false);
   const [error, setError] = useState('');
+  const [showLearnMore, setShowLearnMore] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -91,7 +93,7 @@ const Home = () => {
               </h1>
               <p className="text-xl text-nj-grey-400 max-w-lg leading-relaxed">
                 NakedJake Live is a small, independent streaming space for the anti-clothing crowd.
-Music, tech, conversations, life, experiments — whatever’s happening right now.
+                Music, tech, conversations, life, experiments — whatever’s happening right now.
               </p>
             </div>
 
@@ -141,7 +143,12 @@ Music, tech, conversations, life, experiments — whatever’s happening right n
 
             <div className="pt-8 border-t border-nj-grey-800 w-full">
               <p className="text-sm text-nj-grey-500">
-                <span className="text-nj-red font-semibold mr-2">Learn more</span>
+                <button
+                  onClick={() => setShowLearnMore(true)}
+                  className="text-nj-red font-semibold mr-2 hover:text-white transition-colors"
+                >
+                  Learn more
+                </button>
                 about the platform.
               </p>
             </div>
@@ -164,6 +171,8 @@ Music, tech, conversations, life, experiments — whatever’s happening right n
             </div>
           </div>
         </div>
+
+        <LearnMoreModal open={showLearnMore} onClose={() => setShowLearnMore(false)} />
 
         {checkingCode && (
           <div className="z-50 fixed inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm animate-fade-in">
@@ -188,8 +197,7 @@ Music, tech, conversations, life, experiments — whatever’s happening right n
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center text-xs text-nj-grey-500">
           <p>© 2026 NakedJake. All rights reserved.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+            <a href="mailto:nakedjake@sixtyoneeighty.net" className="hover:text-white transition-colors">Support/Questions?</a>
           </div>
         </div>
       </footer>
