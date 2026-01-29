@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, use } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { CallingState, useCallStateHooks } from '@stream-io/video-react-sdk';
@@ -8,17 +8,17 @@ import Button from '@/components/Button';
 import PlainButton from '@/components/PlainButton';
 
 interface MeetingEndProps {
-  params: {
+  params: Promise<{
     meetingId: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     invalid?: string;
-  };
+  }>;
 }
 
 const MeetingEnd = ({ params, searchParams }: MeetingEndProps) => {
-  const { meetingId } = params;
-  const { invalid } = searchParams;
+  const { meetingId } = use(params);
+  const { invalid } = use(searchParams);
   const router = useRouter();
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();

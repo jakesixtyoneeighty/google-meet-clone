@@ -1,5 +1,5 @@
 'use client';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   CallingState,
@@ -23,13 +23,13 @@ import Spinner from '@/components/Spinner';
 import TextField from '@/components/TextField';
 
 interface LobbyProps {
-  params: {
+  params: Promise<{
     meetingId: string;
-  };
+  }>;
 }
 
 const Lobby = ({ params }: LobbyProps) => {
-  const { meetingId } = params;
+  const { meetingId } = use(params);
   const validMeetingId = MEETING_ID_REGEX.test(meetingId);
   const { newMeeting, setNewMeeting } = useContext(AppContext);
   const { client: chatClient } = useChatContext();
