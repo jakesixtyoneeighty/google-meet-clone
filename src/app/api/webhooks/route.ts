@@ -58,14 +58,25 @@ export async function POST(req: Request) {
     case 'user.created':
     case 'user.updated':
       const newUser = evt.data;
+
+      // Get primary email
+      const primaryEmail = newUser.email_addresses.find(
+        (e) => e.id === newUser.primary_email_address_id
+      )?.email_address;
+
+      // Auto-assign host role for @sixtyoneeighty.net domain
+      const isHostDomain = primaryEmail?.endsWith('@sixtyoneeighty.net');
+      const metadataRole = newUser.public_metadata?.role as string | undefined;
+      const userRole = metadataRole || (isHostDomain ? 'host' : 'user');
+
       await client.upsertUsers([
         {
           id: newUser.id,
-          role: 'user',
+          role: userRole,
           name: `${newUser.first_name} ${newUser.last_name}`,
           custom: {
             username: newUser.username,
-            email: newUser.email_addresses[0].email_address,
+            email: primaryEmail,
           },
           image: newUser.has_image ? newUser.image_url : undefined,
         },

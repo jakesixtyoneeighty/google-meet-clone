@@ -1,18 +1,21 @@
 import { SignInButton, UserButton, useUser } from '@clerk/nextjs';
 import clsx from 'clsx';
 import Image from 'next/image';
-import { 
-  Settings, 
-  HelpCircle, 
-  MessageSquareWarning, 
+import Link from 'next/link';
+import {
+  Settings,
+  HelpCircle,
+  MessageSquareWarning,
   LayoutGrid,
-  ChevronDown
+  ChevronDown,
+  Shield
 } from 'lucide-react';
 
 import Avatar from './Avatar';
 import IconButton from './IconButton';
 import PlainButton from './PlainButton';
 import useTime from '../hooks/useTime';
+import { usePermissions } from '../hooks/usePermissions';
 
 interface HeaderProps {
   navItems?: boolean;
@@ -20,6 +23,7 @@ interface HeaderProps {
 
 const Header = ({ navItems = true }: HeaderProps) => {
   const { isLoaded, isSignedIn, user } = useUser();
+  const { canCreateMeeting } = usePermissions();
   const { currentDateTime } = useTime();
   const email = user?.primaryEmailAddress?.emailAddress;
 
@@ -46,13 +50,18 @@ const Header = ({ navItems = true }: HeaderProps) => {
               {currentDateTime}
             </div>
             <div className="hidden sm:flex items-center gap-2 border-r border-nj-grey-800 pr-4">
+              {canCreateMeeting && (
+                <Link href="/admin" title="Admin Panel">
+                  <IconButton title="Admin Panel" icon={<Shield size={20} />} />
+                </Link>
+              )}
               <IconButton title="Support" icon={<HelpCircle size={20} />} />
               <IconButton title="Report a problem" icon={<MessageSquareWarning size={20} />} />
               <IconButton title="Settings" icon={<Settings size={20} />} />
             </div>
           </>
         )}
-        
+
         <div className="flex items-center gap-4 pl-2">
           {navItems && (
             <div className="hidden sm:block">

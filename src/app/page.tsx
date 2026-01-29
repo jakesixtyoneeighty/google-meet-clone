@@ -14,6 +14,7 @@ import clsx from 'clsx';
 import { Video, Keyboard, Plus } from 'lucide-react';
 
 import { API_KEY, CALL_TYPE } from '@/contexts/MeetProvider';
+import { usePermissions } from '@/hooks/usePermissions';
 import { AppContext, MEETING_ID_REGEX } from '@/contexts/AppProvider';
 import Header from '@/components/Header';
 import TextField from '@/components/TextField';
@@ -29,6 +30,7 @@ const GUEST_USER: User = { id: 'guest', type: 'guest' };
 const Home = () => {
   const { setNewMeeting } = useContext(AppContext);
   const { isLoaded, isSignedIn } = useUser();
+  const { canCreateMeeting } = usePermissions();
   const [code, setCode] = useState('');
   const [checkingCode, setCheckingCode] = useState(false);
   const [error, setError] = useState('');
@@ -93,20 +95,26 @@ const Home = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full max-w-xl">
-              {isSignedIn ? (
-                <button 
+              {isSignedIn && canCreateMeeting ? (
+                <button
                   onClick={handleNewMeeting}
                   className="btn-premium w-full sm:w-auto flex items-center gap-2 group"
                 >
                   <Plus size={20} className="group-hover:rotate-90 transition-transform" />
                   New Broadcast
                 </button>
+              ) : isSignedIn ? (
+                <div className="flex items-center gap-2 px-4 py-3 rounded-lg bg-nj-grey-900/50 border border-nj-grey-800">
+                  <span className="text-nj-grey-400 text-sm">
+                    Join broadcasts using a code below
+                  </span>
+                </div>
               ) : (
                 <SignInButton mode="modal">
                   <button className="btn-premium w-full sm:w-auto">Get Started</button>
                 </SignInButton>
               )}
-              
+
               <div className="flex items-center gap-2 w-full sm:w-auto sm:ml-4">
                 <div className="relative flex-grow sm:w-64">
                   <div className="absolute left-3 top-1/2 -translate-y-1/2 text-nj-grey-500">
@@ -120,7 +128,7 @@ const Home = () => {
                     className="w-full bg-nj-grey-900 border border-nj-grey-800 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:border-nj-red transition-colors text-white placeholder-nj-grey-500"
                   />
                 </div>
-                <button 
+                <button
                   onClick={handleCode}
                   disabled={!code}
                   className="px-6 py-3 font-semibold text-nj-red hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"

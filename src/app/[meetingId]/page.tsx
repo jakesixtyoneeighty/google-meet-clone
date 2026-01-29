@@ -68,6 +68,21 @@ const Lobby = ({ params }: LobbyProps) => {
     };
 
     const createCall = async () => {
+      // Verify user has host permissions before creating
+      try {
+        const permCheck = await fetch('/api/permissions');
+        const { canCreateMeeting } = await permCheck.json();
+
+        if (!canCreateMeeting) {
+          router.push('/?error=unauthorized');
+          return;
+        }
+      } catch (e) {
+        console.error('Failed to check permissions:', e);
+        router.push('/?error=unauthorized');
+        return;
+      }
+
       await call?.create({
         data: {
           members: [
