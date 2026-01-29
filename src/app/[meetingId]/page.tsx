@@ -1,5 +1,5 @@
 'use client';
-import { useContext, useEffect, useMemo, useState, use } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   CallingState,
@@ -23,13 +23,13 @@ import Spinner from '@/components/Spinner';
 import TextField from '@/components/TextField';
 
 interface LobbyProps {
-  params: Promise<{
+  params: {
     meetingId: string;
-  }>;
+  };
 }
 
 const Lobby = ({ params }: LobbyProps) => {
-  const { meetingId } = use(params);
+  const { meetingId } = params;
   const validMeetingId = MEETING_ID_REGEX.test(meetingId);
   const { newMeeting, setNewMeeting } = useContext(AppContext);
   const { client: chatClient } = useChatContext();
@@ -70,10 +70,14 @@ const Lobby = ({ params }: LobbyProps) => {
     const createCall = async () => {
       // Verify user has host permissions before creating
       try {
-        const permCheck = await fetch('/api/permissions');
-        const { canCreateMeeting } = await permCheck.json();
+        const permCheck = await fetch('/api/permissions', { cache: 'no-store' });
+        if (!permCheck.ok) {
+          router.push('/?error=unauthorized');
+          return;
+        }
 
-        if (!canCreateMeeting) {
+        const permissions = await permCheck.json().catch(() => null);
+        if (!permissions?.canCreateMeeting) {
           router.push('/?error=unauthorized');
           return;
         }

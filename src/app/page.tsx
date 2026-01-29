@@ -55,7 +55,7 @@ const Home = () => {
     if (!MEETING_ID_REGEX.test(code)) return;
     setCheckingCode(true);
 
-    const client = new StreamVideoClient({
+    const client = StreamVideoClient.getOrCreateInstance({
       apiKey: API_KEY,
       user: GUEST_USER,
     });

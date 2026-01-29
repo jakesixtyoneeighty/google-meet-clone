@@ -44,19 +44,13 @@ const MeetProvider = ({ meetingId, children }: MeetProviderProps) => {
   useEffect(() => {
     if (!isLoaded) return;
 
-    const customProvider = async () => {
-      const token = await tokenProvider(clerkUser?.id);
-      return token;
-    };
+    let isCancelled = false;
+    setLoading(true);
 
-    const setUpChat = async (user: ChatUser) => {
-      await _chatClient.connectUser(user, customProvider);
-      setChatClient(_chatClient);
-      setLoading(false);
-    };
+    const customProvider = async () => tokenProvider(clerkUser?.id);
 
     let user: User | ChatUser;
-    if (isSignedIn) {
+    if (isSignedIn && clerkUser) {
       user = {
         id: clerkUser.id,
         name: clerkUser.fullName!,
@@ -74,22 +68,48 @@ const MeetProvider = ({ meetingId, children }: MeetProviderProps) => {
     }
 
     const _chatClient = StreamChat.getInstance(API_KEY);
-    const _videoClient = new StreamVideoClient({
+    const _videoClient = StreamVideoClient.getOrCreateInstance({
       apiKey: API_KEY,
       user,
       tokenProvider: customProvider,
     });
     const call = _videoClient.call(CALL_TYPE, meetingId);
 
-    setVideoClient(_videoClient);
-    setCall(call);
-    setUpChat(user);
+    const setUpChat = async () => {
+      try {
+        if (_chatClient.userID && _chatClient.userID !== user.id) {
+          await _chatClient.disconnectUser();
+        }
+        if (!_chatClient.userID) {
+          await _chatClient.connectUser(user, customProvider);
+        }
+        if (isCancelled) return;
+        setChatClient(_chatClient);
+        setVideoClient(_videoClient);
+        setCall(call);
+        setLoading(false);
+      } catch (error) {
+        console.error('Failed to set up Stream clients:', error);
+      }
+    };
+
+    setUpChat();
 
     return () => {
+      isCancelled = true;
       _videoClient.disconnectUser();
       _chatClient.disconnectUser();
     };
-  }, [clerkUser, isLoaded, isSignedIn, loading, meetingId]);
+  }, [
+    clerkUser?.id,
+    clerkUser?.fullName,
+    clerkUser?.hasImage,
+    clerkUser?.imageUrl,
+    clerkUser?.username,
+    isLoaded,
+    isSignedIn,
+    meetingId,
+  ]);
 
   if (loading) return <LoadingOverlay />;
 

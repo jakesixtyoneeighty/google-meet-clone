@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useRef, useState, use } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   CallingState,
@@ -41,13 +41,13 @@ import ToggleVideoButton from '@/components/ToggleVideoButton';
 import useTime from '@/hooks/useTime';
 
 interface MeetingProps {
-  params: Promise<{
+  params: {
     meetingId: string;
-  }>;
+  };
 }
 
 const Meeting = ({ params }: MeetingProps) => {
-  const { meetingId } = use(params);
+  const { meetingId } = params;
   const audioRef = useRef<HTMLAudioElement>(null);
   const router = useRouter();
   const call = useCall();

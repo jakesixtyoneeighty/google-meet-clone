@@ -2,9 +2,10 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 
 const useTime = () => {
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState<Date | null>(null);
 
   useEffect(() => {
+    setTime(new Date());
     const intervalId = setInterval(() => {
       setTime(new Date());
     }, 1000); // Update time every second
@@ -38,9 +39,15 @@ const useTime = () => {
     [getTimeString]
   );
 
-  const currentDateTime = useMemo(() => formatTime(time), [time, formatTime]);
+  const currentDateTime = useMemo(
+    () => (time ? formatTime(time) : ''),
+    [time, formatTime]
+  );
 
-  const currentTime = useMemo(() => getTimeString(time), [time, getTimeString]);
+  const currentTime = useMemo(
+    () => (time ? getTimeString(time) : ''),
+    [time, getTimeString]
+  );
 
   return { currentDateTime, currentTime };
 };
