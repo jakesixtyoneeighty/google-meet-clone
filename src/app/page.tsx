@@ -85,12 +85,13 @@ const Home = () => {
           <div className="flex flex-col items-start text-left space-y-8">
             <div className="space-y-4">
               <h1 className="text-6xl md:text-7xl font-extrabold tracking-tighter leading-tight text-gradient">
-                Premium video <br />
-                broadcasting <br />
-                <span className="text-nj-red">for everyone.</span>
+                A place to go live <br />
+                without <br />
+                <span className="text-nj-red">having to wear clothes.</span>
               </h1>
               <p className="text-xl text-nj-grey-400 max-w-lg leading-relaxed">
-                Experience high-fidelity real-time communication with NakedJake Live. Built for creators, teams, and high-impact broadcasts.
+                NakedJake Live is a small, independent streaming space for the anti-clothing crowd.
+Music, tech, conversations, life, experiments — whatever’s happening right now.
               </p>
             </div>
 
@@ -106,7 +107,7 @@ const Home = () => {
               ) : isSignedIn ? (
                 <div className="flex items-center gap-2 px-4 py-3 rounded-lg bg-nj-grey-900/50 border border-nj-grey-800">
                   <span className="text-nj-grey-400 text-sm">
-                    Join broadcasts using a code below
+                    Join stream using a code below
                   </span>
                 </div>
               ) : (
@@ -122,7 +123,7 @@ const Home = () => {
                   </div>
                   <input
                     type="text"
-                    placeholder="Enter code or link"
+                    placeholder="Got an invite or a link? Drop it here."
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
                     className="w-full bg-nj-grey-900 border border-nj-grey-800 rounded-lg py-3 pl-10 pr-4 focus:outline-none focus:border-nj-red transition-colors text-white placeholder-nj-grey-500"
@@ -141,7 +142,7 @@ const Home = () => {
             <div className="pt-8 border-t border-nj-grey-800 w-full">
               <p className="text-sm text-nj-grey-500">
                 <span className="text-nj-red font-semibold mr-2">Learn more</span>
-                about our premium features and high-fidelity broadcasting.
+                about the platform.
               </p>
             </div>
           </div>
@@ -151,14 +152,14 @@ const Home = () => {
             <div className="glass-card p-2 relative shadow-2xl overflow-hidden border-nj-grey-800">
               <Image
                 src="/branding/splash.png"
-                alt="NakedJake Live Experience"
+                alt="NakedJake"
                 width={800}
                 height={600}
                 className="rounded-lg object-cover w-full h-full hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute bottom-6 left-6 right-6 glass-card p-6 bg-black/60 border-white/10 backdrop-blur-md">
-                <h3 className="text-xl font-bold mb-1 text-white tracking-tight">Experience Premium Quality</h3>
-                <p className="text-sm text-nj-grey-300">Ultra-low latency, high-fidelity audio, and crystal clear 4K broadcasting.</p>
+                <h3 className="text-xl font-bold mb-1 text-white tracking-tight">Chill hangs, Naked people</h3>
+                <p className="text-sm text-nj-grey-300">Created for Nudist Online meetups and chats.</p>
               </div>
             </div>
           </div>
@@ -185,11 +186,10 @@ const Home = () => {
 
       <footer className="fixed bottom-0 left-0 right-0 py-6 border-t border-nj-grey-800 bg-black/50 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 flex justify-between items-center text-xs text-nj-grey-500">
-          <p>© 2026 NakedJake Live. All rights reserved.</p>
+          <p>© 2026 NakedJake. All rights reserved.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-white transition-colors">Help Center</a>
           </div>
         </div>
       </footer>
