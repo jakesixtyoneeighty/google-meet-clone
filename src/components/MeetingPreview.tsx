@@ -3,14 +3,15 @@ import {
   VideoPreview,
   useCallStateHooks,
   useConnectedUser,
+  BackgroundFiltersProvider,
+  useBackgroundFilters,
 } from '@stream-io/video-react-sdk';
-import { 
-  Mic, 
-  MicOff, 
-  Video, 
-  VideoOff, 
-  MoreVertical, 
-  Sparkles 
+import {
+  Mic,
+  MicOff,
+  Video,
+  VideoOff,
+  Sparkles
 } from 'lucide-react';
 
 import {
@@ -98,10 +99,10 @@ const MeetingPreview = () => {
       <div className="relative w-full rounded-2xl max-w-185 aspect-video mx-auto shadow-2xl overflow-hidden border border-nj-grey-800 glass-card">
         {/* Background */}
         <div className="absolute inset-0 z-0 bg-nj-grey-950" />
-        
+
         {/* Gradient overlay */}
         <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
-        
+
         {/* Video preview */}
         <div className="absolute inset-0 z-1 flex items-center justify-center rounded-2xl overflow-hidden [&_video]:-scale-x-100">
           <VideoPreview
@@ -149,24 +150,7 @@ const MeetingPreview = () => {
         )}
 
         {devicesEnabled && (
-          <>
-            <div className="z-20 absolute top-6 right-6">
-              <IconButton
-                title="More options"
-                icon={<MoreVertical size={20} />}
-                variant="secondary"
-                className="!bg-black/40 !border-white/10"
-              />
-            </div>
-            <div className="z-20 absolute bottom-6 right-6">
-              <IconButton
-                icon={<Sparkles size={20} />}
-                title="Visual effects"
-                variant="secondary"
-                className="!bg-black/40 !border-white/10 hover:!text-nj-red"
-              />
-            </div>
-          </>
+          <BackgroundBlurButtonWithProvider />
         )}
       </div>
 
@@ -189,6 +173,51 @@ const MeetingPreview = () => {
   );
 };
 
+// Background blur button component - uses the SDK's background filters
+const BackgroundBlurButton = () => {
+  const [isBlurEnabled, setIsBlurEnabled] = useState(false);
+  const {
+    isSupported,
+    isReady,
+    disableBackgroundFilter,
+    applyBackgroundBlurFilter,
+  } = useBackgroundFilters();
+
+  const toggleBlur = () => {
+    if (isBlurEnabled) {
+      disableBackgroundFilter();
+      setIsBlurEnabled(false);
+    } else {
+      applyBackgroundBlurFilter('medium');
+      setIsBlurEnabled(true);
+    }
+  };
+
+  // Don't render if not supported or not ready
+  if (!isSupported || !isReady) return null;
+
+  return (
+    <div className="z-20 absolute bottom-6 right-6">
+      <IconButton
+        icon={<Sparkles size={20} />}
+        title={isBlurEnabled ? 'Turn off background blur' : 'Turn on background blur'}
+        onClick={toggleBlur}
+        variant="secondary"
+        className={`!bg-black/40 !border-white/10 ${isBlurEnabled ? '!text-nj-red' : 'hover:!text-nj-red'}`}
+      />
+    </div>
+  );
+};
+
+// Wrapper that provides the BackgroundFiltersProvider context
+const BackgroundBlurButtonWithProvider = () => {
+  return (
+    <BackgroundFiltersProvider>
+      <BackgroundBlurButton />
+    </BackgroundFiltersProvider>
+  );
+};
+
 export const DisabledVideoPreview = (videoPreviewText: string) => {
   return (
     <div className="flex flex-col items-center gap-4">
@@ -201,3 +230,4 @@ export const DisabledVideoPreview = (videoPreviewText: string) => {
 };
 
 export default MeetingPreview;
+
