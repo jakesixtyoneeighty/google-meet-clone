@@ -1,94 +1,47 @@
-# The Google Meet Clone
+# NakedJake Live
 
-A video conferencing application that replicates the core functionalities of Google Meet. Built using Next.js, TypeScript, and Stream's Video and Chat SDKs, this application allows users to conduct virtual meetings with real-time video, audio, and messaging capabilities.
-
-<p align="center">
-    <a href="https://tropicolx.hashnode.dev/building-a-google-meet-clone-with-nextjs-and-tailwindcss-part-one" style="display: block;" align="center">
-        <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1727703697955/ce9ba7d8-e626-4bdb-8fdf-a98d9061cf34.png" alt="Building a Google Meet Clone with Next.js and TailwindCSS" width="60%" />
-    </a>
-</p>
-<p align="center"><a href="https://tropicolx.hashnode.dev/building-a-google-meet-clone-with-nextjs-and-tailwindcss-part-one" align="center">Click to read!</a></p>
-    
-
-## Table of Contents
-
-- [Features](#features)
-- [Demo](#demo)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Technologies Used](#technologies-used)
-- [License](#license)
+A premium video broadcasting and conferencing application built for the modern web. NakedJake Live provides a distinctive, high-performance experience for virtual meetings, real-time collaboration, and community engagement.
 
 ## Features
 
-- **User Authentication**: Secure user authentication using Clerk for both registered users and guests.
-- **Meeting Lobby**: Users can configure audio and video settings before joining a meeting.
-- **Dynamic Video Layouts**: Supports grid and speaker layouts with smooth animations using GSAP.
-- **Screen Sharing**: Participants can share their screens during the meeting.
-- **Real-time Messaging**: Integrated chat functionality using Stream Chat SDK.
-- **Meeting Recordings**: Ability to record meetings and access recordings afterward.
-- **Responsive Design**: Fully responsive UI built with Tailwind CSS.
-- **Interactive Controls**: Users can mute/unmute audio, enable/disable video, and more.
-
-## Demo
-
-You can access a live demo of the application [here](https://google-meet-clone-eta.vercel.app/).
+- **User Authentication**: Secure user management using Clerk for both registered users and guests.
+- **Meeting Lobby**: Pre-meeting configuration for audio and video settings.
+- **Dynamic Video Layouts**: Premium grid and speaker layouts with high-fidelity animations using GSAP.
+- **Screen Sharing**: High-resolution screen sharing for presentations and collaboration.
+- **Real-time Messaging**: Fully integrated chat functionality using Stream Chat SDK.
+- **Advanced SDK Features**: 
+  - **Noise Suppression**: AI-powered audio enhancement.
+  - **Call Recording**: Cloud recording with easy access.
+  - **Live Reactions**: Real-time engagement during broadcasts.
+  - **Transcription**: Automated live transcription for accessibility.
+- **Premium Design**: A unique, high-contrast aesthetic (Black, White, Red, Grey) that stands out.
+- **Responsive Design**: Optimized for all devices and screen sizes.
 
 ## Prerequisites
 
-- **Node.js** (v14 or higher)
+- **Node.js** (v18 or higher)
 - **npm** or **yarn**
-- **Stream Account**: Sign up for a free account at [Stream](https://getstream.io/)
-- **Clerk Account**: Sign up for a free account at [Clerk](https://clerk.dev/)
-- **ngrok**: For exposing your local server to the internet
+- **Stream Account**: [Sign up for Stream](https://getstream.io/)
+- **Clerk Account**: [Sign up for Clerk](https://clerk.dev/)
 
 ## Installation
 
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/google-meet-clone.git
-   cd google-meet-clone
+   git clone https://github.com/yourusername/nakedjake-live.git
+   cd nakedjake-live
    ```
 
 2. **Install Dependencies**
 
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
-3. **Set Up Stream Dashboard**
-   
-   - Create a new Stream app with video calling and chat messaging enabled.
-   - Update Permissions:
-      -  Navigate to **Roles & Permissions** under **Chat messaging**.
-      -  Select the **user** role and **messaging** scope.
-      -  Edit permissions to enable:
-         - **Create Message**
-         - **Read Channel**
-         - **Read Channel Members**
-      - Save and confirm changes.
+3. **Set Up Environment Variables**
 
-  
-4. **Set Up Clerk Dashboard**
-   
-   [Create and setup a new Clerk application](https://tropicolx.hashnode.dev/building-a-google-meet-clone-with-nextjs-and-tailwindcss-part-one#heading-creating-a-new-clerk-project).
-    
-5. **Set Up ngrok**
-   
-   [Set up an ngrok tunnel](https://tropicolx.hashnode.dev/building-a-google-meet-clone-with-nextjs-and-tailwindcss-part-one#heading-syncing-clerk-with-your-stream-app) for the `/webhooks` route.
-
-
-6. **Configure Clerk Webhooks**
-
-   [Add the webhook to your clerk app](https://tropicolx.hashnode.dev/building-a-google-meet-clone-with-nextjs-and-tailwindcss-part-one#heading-syncing-clerk-with-your-stream-app).
-     
-7. **Set Up Environment Variables**
-
-   Create a `.env.local` file in the root directory and add your Stream and Clerk API keys:
+   Create a `.env.local` file:
 
    ```env
    NEXT_PUBLIC_STREAM_API_KEY=your_stream_api_key
@@ -102,36 +55,24 @@ You can access a live demo of the application [here](https://google-meet-clone-e
 
 ## Usage
 
-1. **Run the Development Server**
+1. **Run Development Server**
 
    ```bash
    npm run dev
-   # or
-   yarn dev
    ```
 
-   The application will be available at `http://localhost:3000`.
+2. **Access Application**
 
-2. **Create a New Meeting**
-
-   - Visit `http://localhost:3000`.
-   - Click on **New Meeting** to generate a unique meeting link.
-
-3. **Join a Meeting**
-
-   - Configure your audio and video settings in the lobby.
-   - Enter the meeting and start collaborating!
+   Visit `http://localhost:3000` to start your first NakedJake Live session.
 
 ## Technologies Used
 
-- **Next.js**: React framework for server-side rendering and routing.
-- **TypeScript**: Typed superset of JavaScript.
-- **Tailwind CSS**: Utility-first CSS framework.
-- **GSAP**: Animation library for smooth transitions.
-- **Stream Video SDK**: Provides video calling functionality.
-- **Stream Chat SDK**: Enables real-time messaging.
-- **Clerk**: User management and authentication.
-- **ngrok**: Exposes local servers to the internet securely.
+- **Next.js 15**: Modern React framework.
+- **React 19**: Latest React features.
+- **Tailwind CSS**: Utility-first styling.
+- **GSAP**: Premium animations.
+- **Stream Video & Chat SDKs**: Real-time infrastructure.
+- **Clerk**: Authentication & User Management.
 
 ## License
 

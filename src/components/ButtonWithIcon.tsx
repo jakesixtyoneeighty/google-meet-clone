@@ -1,9 +1,9 @@
-import { ReactNode } from 'react';
+import { ReactNode, ReactElement } from 'react';
 import clsx from 'clsx';
 
 interface ButtonWithIconProps {
   children: ReactNode;
-  icon: JSX.Element;
+  icon: ReactElement;
   onClick?: () => void;
   rounding?: 'sm' | 'md' | 'lg';
   size?: 'sm' | 'md';

@@ -8,9 +8,15 @@ import 'stream-chat-react/dist/css/v2/index.css';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Moogle Meet',
+  title: 'NakedJake Live',
   description:
-    'Real-time meetings by Moogle. Using your browser, share your video, desktop, and presentations with teammates and customers.',
+    'Premium real-time video broadcasting and meetings. Connect, collaborate, and celebrate with NakedJake Live.',
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon-16x16.png',
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({

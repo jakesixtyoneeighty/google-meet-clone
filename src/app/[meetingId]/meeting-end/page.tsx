@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, use } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { CallingState, useCallStateHooks } from '@stream-io/video-react-sdk';
@@ -8,22 +8,23 @@ import Button from '@/components/Button';
 import PlainButton from '@/components/PlainButton';
 
 interface MeetingEndProps {
-  params: {
+  params: Promise<{
     meetingId: string;
-  };
-  searchParams?: {
-    invalid: string;
-  };
+  }>;
+  searchParams: Promise<{
+    invalid?: string;
+  }>;
 }
 
 const MeetingEnd = ({ params, searchParams }: MeetingEndProps) => {
-  const { meetingId } = params;
+  const { meetingId } = use(params);
+  const { invalid } = use(searchParams);
   const router = useRouter();
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [countdownNumber, setCountdownNumber] = useState(60);
-  const invalidMeeting = searchParams?.invalid === 'true';
+  const invalidMeeting = invalid === 'true';
 
   useEffect(() => {
     if (!invalidMeeting && callingState !== CallingState.LEFT) {
@@ -86,21 +87,13 @@ const MeetingEnd = ({ params, searchParams }: MeetingEndProps) => {
         </span>
       </div>
       <div className="mt-6 px-4 flex flex-col items-center gap-8">
-        <h1 className="text-4xl leading-[2.75rem] font-normal text-dark-gray tracking-normal">
-          {invalidMeeting ? 'Check your meeting code' : 'You left the meeting'}
+        <h1 className="text-4xl leading-[2.75rem] font-bold text-white tracking-tight">
+          {invalidMeeting ? 'Invalid session code' : 'Broadcast ended'}
         </h1>
         {invalidMeeting && (
-          <div className="font-roboto text-base text-meet-gray text-center">
+          <div className="font-medium text-base text-nj-grey-400 text-center">
             <p>
-              Make sure you entered the correct meeting code in the URL, for
-              example:{' '}
-            </p>
-            <p>
-              https://{window.location.host}/
-              <span className="font-extrabold">xxx-yyyy-zzz</span>
-              <a href="#" className="ml-2 text-primary">
-                Learn more
-              </a>
+              Please verify your session code and try again.
             </p>
           </div>
         )}
@@ -121,7 +114,7 @@ const MeetingEnd = ({ params, searchParams }: MeetingEndProps) => {
           </div>
           <PlainButton size="sm">Submit feedback</PlainButton>
         </div>
-        <div className="max-w-100 flex flex-wrap flex-col rounded items-center pl-4 pr-3 pt-4 pb-1 border border-hairline-gray text-left">
+        <div className="max-w-100 flex flex-wrap flex-col rounded-xl items-center pl-4 pr-3 pt-4 pb-1 border border-nj-grey-800 glass-card text-left">
           <div className="flex items-center">
             <Image
               alt="Your meeting is safe"
@@ -130,11 +123,11 @@ const MeetingEnd = ({ params, searchParams }: MeetingEndProps) => {
               src="https://www.gstatic.com/meet/security_shield_356739b7c38934eec8fb0c8e93de8543.svg"
             />
             <div className="pl-4">
-              <h2 className="text-meet-black text-lg leading-6 tracking-normal font-normal">
-                Your meeting is safe
+              <h2 className="text-white text-lg leading-6 tracking-tight font-bold">
+                Your broadcast is secure
               </h2>
-              <div className="font-roboto text-sm text-meet-gray tracking-loosest">
-                No one can join a meeting unless invited or admitted by the host
+              <div className="text-sm text-nj-grey-400 tracking-tight">
+                All NakedJake Live sessions are encrypted and protected.
               </div>
             </div>
           </div>

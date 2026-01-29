@@ -1,10 +1,8 @@
 import { ReactNode } from 'react';
 import { useCallStateHooks } from '@stream-io/video-react-sdk';
+import { Mic, Video, Volume2 } from 'lucide-react';
 
 import Dropdown from './Dropdown';
-import Mic from './icons/Mic';
-import Videocam from './icons/Videocam';
-import VolumeUp from './icons/VolumeUp';
 
 type DeviceSelectorProps = {
   devices: MediaDeviceInfo[] | undefined;
@@ -67,7 +65,7 @@ export const AudioInputDeviceSelector = ({
       devices={devices}
       selectedDeviceId={selectedDevice}
       onSelect={(deviceId) => microphone.select(deviceId)}
-      icon={<Mic width={20} height={20} color="var(--meet-black)" />}
+      icon={<Mic size={18} className="text-nj-grey-400" />}
       disabled={disabled}
       className={className}
       dark={dark}
@@ -88,7 +86,7 @@ export const VideoInputDeviceSelector = ({
       devices={devices}
       selectedDeviceId={selectedDevice}
       onSelect={(deviceId) => camera.select(deviceId)}
-      icon={<Videocam width={18} height={18} color="var(--meet-black)" />}
+      icon={<Video size={18} className="text-nj-grey-400" />}
       disabled={disabled}
       className={className}
       dark={dark}
@@ -118,7 +116,7 @@ export const AudioOutputDeviceSelector = ({
           : 'Default - ...'
       }
       onSelect={(deviceId) => speaker.select(deviceId)}
-      icon={<VolumeUp width={20} height={20} color="var(--meet-black)" />}
+      icon={<Volume2 size={18} className="text-nj-grey-400" />}
       disabled={disabled}
       className={className}
       dark={dark}

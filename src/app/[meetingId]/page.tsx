@@ -1,5 +1,5 @@
 'use client';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   CallingState,
@@ -23,13 +23,13 @@ import Spinner from '@/components/Spinner';
 import TextField from '@/components/TextField';
 
 interface LobbyProps {
-  params: {
+  params: Promise<{
     meetingId: string;
-  };
+  }>;
 }
 
 const Lobby = ({ params }: LobbyProps) => {
-  const { meetingId } = params;
+  const { meetingId } = use(params);
   const validMeetingId = MEETING_ID_REGEX.test(meetingId);
   const { newMeeting, setNewMeeting } = useContext(AppContext);
   const { client: chatClient } = useChatContext();
@@ -101,18 +101,18 @@ const Lobby = ({ params }: LobbyProps) => {
   }, [newMeeting, setNewMeeting]);
 
   const heading = useMemo(() => {
-    if (loading) return 'Getting ready...';
-    return isGuest ? "What's your name?" : 'Ready to join?';
+    if (loading) return 'Preparing...';
+    return isGuest ? "What's your name?" : 'Ready to broadcast?';
   }, [loading, isGuest]);
 
   const participantsUI = useMemo(() => {
     switch (true) {
       case loading:
-        return "You'll be able to join in just a moment";
+        return "Broadcasting room is almost ready";
       case joining:
-        return "You'll join the call in just a moment";
+        return "Entering broadcast room...";
       case participants.length === 0:
-        return 'No one else is here';
+        return 'No one else is in the broadcast';
       case participants.length > 0:
         return <CallParticipants participants={participants} />;
       default:
@@ -135,7 +135,6 @@ const Lobby = ({ params }: LobbyProps) => {
       await chatClient.connectUser(
         {
           id: GUEST_ID,
-          type: 'guest',
           name: guestName,
         },
         tokenProvider
@@ -199,12 +198,11 @@ const Lobby = ({ params }: LobbyProps) => {
           <div>
             {!joining && !loading && (
               <Button
-                className="w-60 text-sm"
+                className="w-60 text-sm btn-premium"
                 onClick={joinCall}
                 disabled={isGuest && !guestName}
-                rounding="lg"
               >
-                Join now
+                Join Broadcast
               </Button>
             )}
             {(joining || loading) && (

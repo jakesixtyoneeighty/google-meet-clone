@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import clsx from 'clsx';
-
-import Exclamation from './icons/Exclamation';
+import { AlertCircle } from 'lucide-react';
 
 export interface IconButtonProps {
   icon: ReactNode;
@@ -23,8 +22,8 @@ const IconButton = ({
   className,
 }: IconButtonProps) => {
   const alertIcon = (
-    <div className="absolute -top-[5px] right-0 w-6 h-6 bg-meet-orange rounded-full flex items-center justify-center">
-      <Exclamation />
+    <div className="absolute -top-1 -right-1 text-nj-red bg-black rounded-full shadow-red-glow">
+      <AlertCircle size={16} fill="currentColor" className="text-white" />
     </div>
   );
 
@@ -34,7 +33,7 @@ const IconButton = ({
         onClick={onClick}
         title={title}
         className={clsx(
-          'relative h-9 w-9 rounded-full inline-flex items-center justify-center text-center text-base font-medium hover:bg-[#f6f6f6] disabled:bg-transparent disabled:text-[#3c404361] [&_svg]:fill-meet-gray',
+          'relative h-10 w-10 rounded-lg inline-flex items-center justify-center transition-all duration-200 hover:bg-nj-grey-800 text-nj-grey-400 hover:text-white disabled:opacity-50',
           className
         )}
       >
@@ -47,14 +46,11 @@ const IconButton = ({
       <button
         onClick={onClick}
         title={title}
-        style={{
-          WebkitMaskImage: 'none',
-        }}
         className={clsx(
-          'relative h-14 w-14 rounded-full inline-flex items-center justify-center text-center text-base font-medium border border-solid transition-all ease-linear duration-250 hover:transition-none disabled:bg-transparent disabled:text-[#3c404361]',
+          'relative h-12 w-12 rounded-full inline-flex items-center justify-center transition-all duration-200 border border-nj-grey-700 active:scale-95 disabled:opacity-50',
           active
-            ? 'bg-meet-red border-meet-red hover:bg-hover-red hover:border-hover-red transition-none'
-            : 'hover:bg-[rgba(255,255,255,.4)] border-white',
+            ? 'bg-nj-red border-nj-red text-white hover:bg-red-700 shadow-red-glow'
+            : 'bg-nj-grey-900/50 text-white hover:bg-nj-grey-800 hover:border-nj-grey-600',
           className
         )}
       >

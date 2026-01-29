@@ -4,6 +4,7 @@ import {
   CallRecordingList,
   useCall,
 } from '@stream-io/video-react-sdk';
+import { Video } from 'lucide-react';
 
 import Popup from './Popup';
 import useClickOutside from '../hooks/useClickOutside';
@@ -39,10 +40,23 @@ const RecordingsPopup = ({ isOpen, onClose }: RecordingsPopupProps) => {
     <Popup
       ref={ref}
       open={isOpen}
-      className="left-auto right-[0] bottom-[3.25rem] overflow-hidden !bg-container-gray shadow-[0_2px_2px_0_rgba(0,0,0,.14),0_3px_1px_-2px_rgba(0,0,0,.12),0_1px_5px_0_rgba(0,0,0,.2)]"
+      onClose={onClose}
+      title={
+        <div className="flex items-center gap-2">
+          <Video size={18} className="text-nj-red" />
+          <h2 className="text-sm font-bold uppercase tracking-widest text-white">Broadcast Recordings</h2>
+        </div>
+      }
+      className="left-auto right-0 bottom-24 w-96 h-[30rem] !bg-nj-grey-950/90 backdrop-blur-xl border border-nj-grey-800 shadow-red-glow"
     >
-      <div className="w-full min-h-[7rem] py-8 px-4">
-        <CallRecordingList callRecordings={callRecordings} loading={loading} />
+      <div className="w-full h-full p-4 overflow-y-auto scrollbar-hide">
+        {loading ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="w-8 h-8 border-2 border-nj-red border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : (
+          <CallRecordingList callRecordings={callRecordings} />
+        )}
       </div>
     </Popup>
   );

@@ -4,6 +4,14 @@ import {
   useCallStateHooks,
   useConnectedUser,
 } from '@stream-io/video-react-sdk';
+import { 
+  Mic, 
+  MicOff, 
+  Video, 
+  VideoOff, 
+  MoreVertical, 
+  Sparkles 
+} from 'lucide-react';
 
 import {
   AudioInputDeviceSelector,
@@ -11,13 +19,7 @@ import {
   VideoInputDeviceSelector,
 } from './DeviceSelector';
 import IconButton from './IconButton';
-import MoreVert from './icons/MoreVert';
-import Mic from './icons/Mic';
-import MicOff from './icons/MicOff';
 import SpeechIndicator from './SpeechIndicator';
-import Videocam from './icons/Videocam';
-import VideocamOff from './icons/VideocamOff';
-import VisualEffects from './icons/VisualEffects';
 import useSoundDetected from '../hooks/useSoundDetected';
 
 const MeetingPreview = () => {
@@ -93,22 +95,25 @@ const MeetingPreview = () => {
 
   return (
     <div className="w-full max-w-3xl lg:pr-2 lg:mt-8">
-      <div className="relative w-full rounded-lg max-w-185 aspect-video mx-auto shadow-md">
+      <div className="relative w-full rounded-2xl max-w-185 aspect-video mx-auto shadow-2xl overflow-hidden border border-nj-grey-800 glass-card">
         {/* Background */}
-        <div className="absolute z-0 left-0 w-full h-full rounded-lg bg-meet-black" />
+        <div className="absolute inset-0 z-0 bg-nj-grey-950" />
+        
         {/* Gradient overlay */}
-        <div className="absolute z-2 bg-gradient-overlay left-0 w-full h-full rounded-lg" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
+        
         {/* Video preview */}
-        <div className="absolute w-full h-full [&>div]:w-auto [&>div]:h-auto z-1 flex items-center justify-center rounded-lg overflow-hidden [&_video]:-scale-x-100">
+        <div className="absolute inset-0 z-1 flex items-center justify-center rounded-2xl overflow-hidden [&_video]:-scale-x-100">
           <VideoPreview
             DisabledVideoPreview={() => DisabledVideoPreview(videoPreviewText)}
           />
         </div>
+
         {devicesEnabled && (
-          <div className="z-3 absolute bottom-4 left-1/2 -ml-17 flex items-center gap-6">
+          <div className="z-20 absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 px-6 py-3 bg-black/40 backdrop-blur-md rounded-full border border-white/10 shadow-premium">
             {/* Microphone control */}
             <IconButton
-              icon={isMicrophoneMute ? <MicOff /> : <Mic />}
+              icon={isMicrophoneMute ? <MicOff size={20} /> : <Mic size={20} />}
               title={
                 isMicrophoneMute ? 'Turn on microphone' : 'Turn off microphone'
               }
@@ -119,7 +124,7 @@ const MeetingPreview = () => {
             />
             {/* Camera control */}
             <IconButton
-              icon={isCameraMute ? <VideocamOff /> : <Videocam />}
+              icon={isCameraMute ? <VideoOff size={20} /> : <Video size={20} />}
               title={isCameraMute ? 'Turn on camera' : 'Turn off camera'}
               onClick={toggleCamera}
               active={isCameraMute}
@@ -128,43 +133,55 @@ const MeetingPreview = () => {
             />
           </div>
         )}
+
         {/* Speech Indicator */}
         {microphoneStatus && microphoneStatus === 'enabled' && (
-          <div className="z-2 absolute bottom-3.5 left-3.5 w-6.5 h-6.5 flex items-center justify-center bg-primary rounded-full">
+          <div className="z-20 absolute bottom-6 left-6 w-10 h-10 flex items-center justify-center bg-nj-red rounded-full shadow-red-glow border-2 border-white/20">
             <SpeechIndicator isSpeaking={soundDetected} />
           </div>
         )}
+
         {/* User name */}
         {devicesEnabled && hasCameraPermission && (
-          <div className="z-3 max-w-94 h-8 absolute left-0 top-3 mt-1.5 mb-1 mx-4 truncate text-white text-sm font-medium leading-5 flex items-center justify-start cursor-default select-none">
-            {user?.name}
+          <div className="z-20 absolute left-6 top-6 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-white text-sm font-bold tracking-tight shadow-premium">
+            {user?.name || 'Broadcaster'}
           </div>
         )}
+
         {devicesEnabled && (
           <>
-            <div className="z-2 absolute top-2.5 right-1 [&>button]:w-12 [&>button]:h-12 [&>button]:border-none [&>button]:transition-none [&>button]:hover:bg-[rgba(255,255,255,.2)] [&>button]:hover:shadow-none">
+            <div className="z-20 absolute top-6 right-6">
               <IconButton
                 title="More options"
-                icon={<MoreVert />}
+                icon={<MoreVertical size={20} />}
                 variant="secondary"
+                className="!bg-black/40 !border-white/10"
               />
             </div>
-            <div className="z-3 absolute bottom-4 right-2.5">
+            <div className="z-20 absolute bottom-6 right-6">
               <IconButton
-                icon={<VisualEffects />}
-                title="Apply visual effects"
+                icon={<Sparkles size={20} />}
+                title="Visual effects"
                 variant="secondary"
+                className="!bg-black/40 !border-white/10 hover:!text-nj-red"
               />
             </div>
           </>
         )}
       </div>
-      <div className="hidden lg:flex h-17 items-center gap-1 mt-4 ml-2">
+
+      <div className="hidden lg:flex items-center gap-4 mt-8 ml-2 px-4">
         {displaySelectors && (
           <>
-            <AudioInputDeviceSelector disabled={!hasMicrophonePermission} />
-            <AudioOutputDeviceSelector disabled={!hasMicrophonePermission} />
-            <VideoInputDeviceSelector disabled={!hasCameraPermission} />
+            <div className="flex-1">
+              <AudioInputDeviceSelector disabled={!hasMicrophonePermission} />
+            </div>
+            <div className="flex-1">
+              <AudioOutputDeviceSelector disabled={!hasMicrophonePermission} />
+            </div>
+            <div className="flex-1">
+              <VideoInputDeviceSelector disabled={!hasCameraPermission} />
+            </div>
           </>
         )}
       </div>
@@ -174,7 +191,12 @@ const MeetingPreview = () => {
 
 export const DisabledVideoPreview = (videoPreviewText: string) => {
   return (
-    <div className="text-2xl font-roboto text-white">{videoPreviewText}</div>
+    <div className="flex flex-col items-center gap-4">
+      <div className="w-20 h-20 bg-nj-grey-900 rounded-full flex items-center justify-center border border-nj-grey-800 shadow-premium">
+        <VideoOff size={40} className="text-nj-grey-500" />
+      </div>
+      <div className="text-xl font-bold tracking-tight text-nj-grey-400 uppercase">{videoPreviewText || 'Camera is off'}</div>
+    </div>
   );
 };
 

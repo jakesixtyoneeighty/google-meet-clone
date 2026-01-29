@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   CallingState,
@@ -10,24 +10,30 @@ import {
   useCall,
   useCallStateHooks,
   useConnectedUser,
+  ReactionsButton,
 } from '@stream-io/video-react-sdk';
 import { Channel } from 'stream-chat';
-import { DefaultStreamChatGenerics, useChatContext } from 'stream-chat-react';
+import { useChatContext } from 'stream-chat-react';
+import { 
+  PhoneOff, 
+  MessageSquare, 
+  Users, 
+  Info, 
+  ScreenShare, 
+  MoreVertical, 
+  Smile,
+  Mic,
+  MicOff,
+  Video,
+  VideoOff,
+  Type
+} from 'lucide-react';
 
 import CallControlButton from '@/components/CallControlButton';
 import CallInfoButton from '@/components/CallInfoButton';
-import CallEndFilled from '@/components/icons/CallEndFilled';
-import Chat from '@/components/icons/Chat';
-import ChatFilled from '@/components/icons/ChatFilled';
 import ChatPopup from '@/components/ChatPopup';
-import ClosedCaptions from '@/components/icons/ClosedCaptions';
 import GridLayout from '@/components/GridLayout';
-import Group from '@/components/icons/Group';
-import Info from '@/components/icons/Info';
-import Mood from '@/components/icons/Mood';
-import PresentToAll from '@/components/icons/PresentToAll';
 import MeetingPopup from '@/components/MeetingPopup';
-import MoreVert from '@/components/icons/MoreVert';
 import RecordingsPopup from '@/components/RecordingsPopup';
 import SpeakerLayout from '@/components/SpeakerLayout';
 import ToggleAudioButton from '@/components/ToggleAudioButton';
@@ -35,13 +41,13 @@ import ToggleVideoButton from '@/components/ToggleVideoButton';
 import useTime from '@/hooks/useTime';
 
 interface MeetingProps {
-  params: {
+  params: Promise<{
     meetingId: string;
-  };
+  }>;
 }
 
 const Meeting = ({ params }: MeetingProps) => {
-  const { meetingId } = params;
+  const { meetingId } = use(params);
   const audioRef = useRef<HTMLAudioElement>(null);
   const router = useRouter();
   const call = useCall();
@@ -51,15 +57,15 @@ const Meeting = ({ params }: MeetingProps) => {
   const { useCallCallingState, useParticipants, useScreenShareState } =
     useCallStateHooks();
   const participants = useParticipants();
-  const { screenShare } = useScreenShareState();
+  const { screenShare, optimisticIsMute: isSharingMute } = useScreenShareState();
   const callingState = useCallCallingState();
 
-  const [chatChannel, setChatChannel] =
-    useState<Channel<DefaultStreamChatGenerics>>();
+  const [chatChannel, setChatChannel] = useState<Channel>();
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isRecordingListOpen, setIsRecordingListOpen] = useState(false);
-  const [participantInSpotlight, _] = participants;
+  const [participantInSpotlight] = participants;
   const [prevParticipantsCount, setPrevParticipantsCount] = useState(0);
+  
   const isCreator = call?.state.createdBy?.id === user?.id;
   const isUnkownOrIdle =
     callingState === CallingState.UNKNOWN || callingState === CallingState.IDLE;
@@ -106,86 +112,110 @@ const Meeting = ({ params }: MeetingProps) => {
     }
   };
 
-  const toggleChatPopup = () => {
-    setIsChatOpen((prev) => !prev);
-  };
-
-  const toggleRecordingsList = () => {
-    setIsRecordingListOpen((prev) => !prev);
-  };
-
   if (isUnkownOrIdle) return null;
 
   return (
     <StreamTheme className="root-theme">
-      <div className="relative w-svw h-svh bg-meet-black overflow-hidden">
-        {isSpeakerLayout && <SpeakerLayout />}
-        {!isSpeakerLayout && <GridLayout />}
-        <div className="absolute left-0 bottom-0 right-0 w-full h-20 bg-meet-black text-white text-center flex items-center justify-between">
-          {/* Meeting ID */}
-          <div className="hidden sm:flex grow shrink basis-1/4 items-center text-start justify-start ml-3 truncate max-w-full">
-            <div className="flex items-center overflow-hidden mx-3 h-20 gap-3 select-none">
-              <span className="font-medium">{currentTime}</span>
-              <span>{'|'}</span>
-              <span className="font-medium truncate">{meetingId}</span>
+      <div className="relative w-screen h-screen bg-black overflow-hidden font-sans">
+        <div className="h-[calc(100vh-88px)] w-full">
+          {isSpeakerLayout ? <SpeakerLayout /> : <GridLayout />}
+        </div>
+
+        {/* Bottom Control Bar */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-nj-grey-950/90 backdrop-blur-xl border-t border-nj-grey-800 px-6 flex items-center justify-between z-10 shadow-premium">
+          
+          {/* Left: Meeting Info */}
+          <div className="hidden lg:flex items-center gap-4 w-1/4">
+            <div className="flex flex-col">
+              <span className="text-lg font-bold text-white leading-none tracking-tight">{currentTime}</span>
+              <span className="text-xs font-medium text-nj-grey-500 mt-1 uppercase tracking-widest">{meetingId}</span>
             </div>
           </div>
-          {/* Meeting Controls */}
-          <div className="relative flex grow shrink basis-1/4 items-center justify-center px-1.5 gap-3 ml-0">
+
+          {/* Center: Controls */}
+          <div className="flex items-center gap-3 justify-center flex-1">
             <ToggleAudioButton />
             <ToggleVideoButton />
+            
+            <div className="h-8 w-px bg-nj-grey-800 mx-1 hidden sm:block" />
+            
             <CallControlButton
-              icon={<ClosedCaptions />}
-              title={'Turn on captions'}
+              icon={<Type size={20} />}
+              title={'Captions'}
+              className="hidden sm:flex"
             />
-            <CallControlButton
-              icon={<Mood />}
-              title={'Send a reaction'}
-              className="hidden sm:inline-flex"
-            />
+            
+            <div className="relative group">
+               <CallControlButton
+                icon={<Smile size={20} />}
+                title={'Reactions'}
+              />
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+                <div className="glass-card p-2 shadow-red-glow scale-90 origin-bottom">
+                  <ReactionsButton />
+                </div>
+              </div>
+            </div>
+
             <CallControlButton
               onClick={toggleScreenShare}
-              icon={<PresentToAll />}
-              title={'Present now'}
+              icon={<ScreenShare size={20} />}
+              title={'Present'}
+              active={!isSharingMute}
             />
-            <RecordCallButton />
-            <div className="hidden sm:block relative">
+            
+            <div className="h-10 w-10 flex items-center justify-center [&_button]:!bg-nj-grey-800 [&_button]:!rounded-full hover:[&_button]:!bg-nj-grey-700">
+              <RecordCallButton />
+            </div>
+
+            <div className="relative hidden sm:block">
               <CallControlButton
-                onClick={toggleRecordingsList}
-                icon={<MoreVert />}
-                title={'View recording list'}
+                onClick={() => setIsRecordingListOpen(!isRecordingListOpen)}
+                icon={<MoreVertical size={20} />}
+                title={'More'}
               />
               <RecordingsPopup
                 isOpen={isRecordingListOpen}
                 onClose={() => setIsRecordingListOpen(false)}
               />
             </div>
-            <CallControlButton
+
+            <button
               onClick={leaveCall}
-              icon={<CallEndFilled />}
-              title={'Leave call'}
-              className="leave-call-button"
-            />
+              className="ml-4 h-12 px-6 rounded-full bg-nj-red hover:bg-red-700 text-white flex items-center gap-2 transition-all shadow-red-glow active:scale-95"
+              title="Leave Broadcast"
+            >
+              <PhoneOff size={20} />
+              <span className="hidden md:inline font-bold uppercase text-xs tracking-widest">End Session</span>
+            </button>
           </div>
-          {/* Meeting Info */}
-          <div className="hidden sm:flex grow shrink basis-1/4 items-center justify-end mr-3">
-            <CallInfoButton icon={<Info />} title="Meeting details" />
-            <CallInfoButton icon={<Group />} title="People" />
-            <CallInfoButton
-              onClick={toggleChatPopup}
-              icon={
-                isChatOpen ? <ChatFilled color="var(--icon-blue)" /> : <Chat />
-              }
-              title="Chat with everyone"
-            />
+
+          {/* Right: Side Panels */}
+          <div className="hidden lg:flex items-center justify-end gap-2 w-1/4">
+            <CallInfoButton icon={<Info size={20} />} title="Details" />
+            <CallInfoButton icon={<Users size={20} />} title="People" />
+            <div className="relative">
+              <CallInfoButton
+                onClick={() => setIsChatOpen(!isChatOpen)}
+                icon={<MessageSquare size={20} />}
+                title="Chat"
+                active={isChatOpen}
+              />
+              {isChatOpen && (
+                <div className="absolute bottom-full right-0 mb-6 w-96 z-50">
+                  <ChatPopup
+                    channel={chatChannel!}
+                    isOpen={isChatOpen}
+                    onClose={() => setIsChatOpen(false)}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
-        <ChatPopup
-          channel={chatChannel!}
-          isOpen={isChatOpen}
-          onClose={() => setIsChatOpen(false)}
-        />
+
         {isCreator && <MeetingPopup />}
+        
         <audio
           ref={audioRef}
           src="https://www.gstatic.com/meet/sounds/join_call_6a6a67d6bcc7a4e373ed40fdeff3930a.ogg"

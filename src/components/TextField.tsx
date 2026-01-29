@@ -18,34 +18,36 @@ const TextField = ({
   onChange,
   placeholder,
   icon,
+  className,
+  ...props
 }: TextFieldProps) => {
   return (
-    <>
-      <label className="mb-2.5 block text-base font-medium text-black sr-only">
+    <div className="flex flex-col w-full">
+      <label className="mb-2 block text-sm font-medium text-nj-grey-400">
         {label}
       </label>
-      <div className="relative">
+      <div className="relative group">
+        {icon && (
+          <span className="absolute top-1/2 left-4 -translate-y-1/2 text-nj-grey-500 group-focus-within:text-nj-red transition-colors">
+            {icon}
+          </span>
+        )}
         <input
           type="text"
           name={name}
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          autoComplete="false"
+          autoComplete="off"
           className={clsx(
-            'w-57.5 h-12 tracking-loose leading-4 font-roboto bg-transparent rounded ring-1 ring-inset ring-[#80868b] hover:ring-meet-black py-2.5 pr-4 outline-none transition focus:ring-2 focus:ring-primary placeholder:font-normal placeholder:text-meet-gray disabled:cursor-default disabled:bg-gray-2',
+            'w-full h-12 bg-nj-grey-900/50 border border-nj-grey-800 rounded-lg py-2.5 pr-4 outline-none transition-all duration-200 text-white placeholder:text-nj-grey-600 focus:border-nj-red focus:bg-nj-grey-900 focus:ring-1 focus:ring-nj-red/20 disabled:opacity-50',
             icon ? 'pl-12' : 'pl-4',
-            icon ? 'w-57.5' : 'w-[18rem]'
+            className
           )}
-          maxLength={60}
+          {...props}
         />
-        {icon && (
-          <span className="absolute top-1/2 left-4 -translate-y-1/2">
-            {icon}
-          </span>
-        )}
       </div>
-    </>
+    </div>
   );
 };
 

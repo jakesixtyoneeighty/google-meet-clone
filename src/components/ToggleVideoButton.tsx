@@ -1,11 +1,9 @@
 import { useCallStateHooks } from '@stream-io/video-react-sdk';
 import clsx from 'clsx';
+import { Video, VideoOff, Sparkles } from 'lucide-react';
 
 import CallControlButton from './CallControlButton';
 import ToggleButtonContainer from './ToggleButtonContainer';
-import Videocam from './icons/Videocam';
-import VideocamOff from './icons/VideocamOff';
-import VisualEffects from './icons/VisualEffects';
 import { VideoInputDeviceSelector } from './DeviceSelector';
 
 const ICON_SIZE = 20;
@@ -29,31 +27,33 @@ const ToggleVideoButton = () => {
   return (
     <ToggleButtonContainer
       deviceSelectors={
-        <VideoInputDeviceSelector
-          className="w-[23.125rem]"
-          dark
-          disabled={!hasBrowserPermission}
-        />
+        <div className="p-2">
+          <VideoInputDeviceSelector
+            className="w-full"
+            dark
+            disabled={!hasBrowserPermission}
+          />
+        </div>
       }
       icons={
-        <div title="Apply visual effects">
-          <VisualEffects width={ICON_SIZE} height={ICON_SIZE} />
+        <div title="Apply visual effects" className="text-nj-grey-400 hover:text-nj-red cursor-pointer p-2">
+          <Sparkles size={ICON_SIZE} />
         </div>
       }
     >
       <CallControlButton
         icon={
           isCameraMute ? (
-            <VideocamOff width={ICON_SIZE} height={ICON_SIZE} />
+            <VideoOff size={ICON_SIZE} />
           ) : (
-            <Videocam width={ICON_SIZE} height={ICON_SIZE} />
+            <Video size={ICON_SIZE} />
           )
         }
         title={isCameraMute ? 'Turn on camera' : 'Turn off camera'}
         onClick={toggleCamera}
         active={isCameraMute}
         alert={!hasBrowserPermission}
-        className={clsx(isCameraMute && 'toggle-button-alert')}
+        className={clsx(isCameraMute && '!bg-nj-red')}
       />
     </ToggleButtonContainer>
   );

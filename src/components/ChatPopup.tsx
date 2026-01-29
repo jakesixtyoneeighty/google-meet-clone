@@ -1,5 +1,4 @@
 import {
-  DefaultStreamChatGenerics,
   MessageInput,
   MessageList,
   Channel,
@@ -12,7 +11,7 @@ import Popup from './Popup';
 interface ChatPopupProps {
   isOpen: boolean;
   onClose: () => void;
-  channel: ChannelType<DefaultStreamChatGenerics>;
+  channel: ChannelType;
 }
 
 const ChatPopup = ({ channel, isOpen, onClose }: ChatPopupProps) => {
@@ -27,7 +26,7 @@ const ChatPopup = ({ channel, isOpen, onClose }: ChatPopupProps) => {
         <Channel channel={channel}>
           <Window>
             <MessageList disableDateSeparator />
-            <MessageInput noFiles />
+            <MessageInput />
           </Window>
         </Channel>
       </div>
