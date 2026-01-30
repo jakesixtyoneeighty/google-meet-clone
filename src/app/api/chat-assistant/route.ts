@@ -8,7 +8,7 @@ import Exa from 'exa-js';
 const STREAM_API_KEY = process.env.NEXT_PUBLIC_STREAM_API_KEY!;
 const STREAM_API_SECRET = process.env.STREAM_API_SECRET!;
 const AI_GATEWAY_API_KEY = process.env.AI_GATEWAY_API_KEY;
-const AI_MODEL = process.env.AI_MODEL || 'bytedance/seed-1.8-thinking';
+const AI_MODEL = process.env.AI_MODEL || 'bytedance/seed-1.8';
 const MOJO_USER_ID = process.env.MOJO_USER_ID || 'mojo-assistant';
 const EXA_API_KEY = process.env.EXA_API_KEY;
 
