@@ -41,7 +41,7 @@ const GridLayout = () => {
     return groups;
   }, [participants]);
 
-  const selectedGroup = participantGroups[page];
+  const selectedGroup = participantGroups[page] ?? [];
 
   useEffect(() => {
     if (!call) return;
@@ -86,10 +86,8 @@ const GridLayout = () => {
         {call && selectedGroup.length > 0 && (
           <>
             {selectedGroup.map((participant) => (
-              <ParticipantView
+              <ParticipantTile
                 participant={participant}
-                ParticipantViewUI={ParticipantViewUI}
-                VideoPlaceholder={VideoPlaceholder}
                 key={participant.sessionId}
               />
             ))}

@@ -1,5 +1,6 @@
 import { StreamClient } from '@stream-io/node-sdk';
 import { NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
 
 const API_KEY = process.env.NEXT_PUBLIC_STREAM_API_KEY!;
 const SECRET = process.env.STREAM_API_SECRET!;
@@ -7,6 +8,11 @@ const MOJO_USER_ID = process.env.MOJO_USER_ID || 'mojo-assistant';
 
 export async function POST() {
     try {
+        const { userId } = await auth();
+        if (!userId) {
+            return new NextResponse('Unauthorized', { status: 401 });
+        }
+
         const client = new StreamClient(API_KEY, SECRET);
 
         // Create/update Mojo user in Stream

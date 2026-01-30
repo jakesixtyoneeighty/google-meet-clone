@@ -43,22 +43,13 @@ const MeetingPreview = () => {
   } = useMicrophoneState();
 
   useEffect(() => {
-    const enableMicAndCam = async () => {
-      try {
-        await camera.enable();
-      } catch (error) {
-        console.error(error);
-      }
-      try {
-        await microphone.enable();
-      } catch (error) {
-        console.error(error);
-      }
+    const prepareDevices = async () => {
+      // Defer enabling until user interaction to avoid permission churn
       setDevicesEnabled(true);
     };
 
-    enableMicAndCam();
-  }, [camera, microphone]);
+    prepareDevices();
+  }, []);
 
   useEffect(() => {
     if (hasMicrophonePermission === undefined) return;

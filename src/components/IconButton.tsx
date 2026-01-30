@@ -46,6 +46,7 @@ const IconButton = ({
       <button
         onClick={onClick}
         title={title}
+        aria-label={title}
         className={clsx(
           'relative h-12 w-12 rounded-full inline-flex items-center justify-center transition-all duration-200 border border-nj-grey-700 active:scale-95 disabled:opacity-50',
           active

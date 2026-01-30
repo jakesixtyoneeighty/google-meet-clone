@@ -198,6 +198,7 @@ const useAnimateVideoLayout = (isSpeakerLayout: boolean) => {
 
       // Cleanup observer on unmount
       return () => {
+        if (rafId) cancelAnimationFrame(rafId);
         if (container) {
           observer.disconnect();
         }

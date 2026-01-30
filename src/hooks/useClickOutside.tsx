@@ -5,10 +5,11 @@ const useClickOutside = (handler: () => void, shallow?: boolean) => {
 
   useEffect(() => {
     let maybeHandler = (event: MouseEvent) => {
+      if (!domNode.current) return;
       if (
-        !domNode.current!.contains(event.target as HTMLElement) &&
+        !domNode.current.contains(event.target as HTMLElement) &&
         (shallow
-          ? !domNode.current!.parentElement?.contains(
+          ? !domNode.current.parentElement?.contains(
               event.target as HTMLElement
             )
           : true)
@@ -22,7 +23,7 @@ const useClickOutside = (handler: () => void, shallow?: boolean) => {
     return () => {
       document.removeEventListener('mousedown', maybeHandler);
     };
-  });
+  }, [handler, shallow]);
 
   return domNode;
 };

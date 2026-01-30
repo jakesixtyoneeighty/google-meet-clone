@@ -97,6 +97,7 @@ const MeetProvider = ({ meetingId, children }: MeetProviderProps) => {
 
     return () => {
       isCancelled = true;
+      call.leave().catch(console.error);
       _videoClient.disconnectUser();
       _chatClient.disconnectUser();
     };

@@ -26,8 +26,6 @@ const generateMeetingId = () => {
   return `${nanoid(3)}-${nanoid(4)}-${nanoid(3)}`;
 };
 
-const GUEST_USER: User = { id: 'guest', type: 'guest' };
-
 const Home = () => {
   const { setNewMeeting } = useContext(AppContext);
   const { isLoaded, isSignedIn } = useUser();
@@ -55,23 +53,26 @@ const Home = () => {
     if (!MEETING_ID_REGEX.test(code)) return;
     setCheckingCode(true);
 
-    const client = StreamVideoClient.getOrCreateInstance({
-      apiKey: API_KEY,
-      user: GUEST_USER,
-    });
-    const call = client.call(CALL_TYPE, code);
-
     try {
-      const response: GetCallResponse = await call.get();
-      if (response.call) {
+      const response = await fetch('/api/meeting/check', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ meetingId: code }),
+      });
+      
+      const data = await response.json();
+
+      if (data.exists) {
         router.push(`/${code}`);
         return;
-      }
-    } catch (e: unknown) {
-      let err = e as ErrorFromResponse<GetCallResponse>;
-      if (err.status === 404) {
+      } else {
         setError("Couldn't find the session you're trying to join.");
       }
+    } catch (e) {
+      console.error(e);
+      setError("Couldn't find the session you're trying to join.");
     }
     setCheckingCode(false);
   };

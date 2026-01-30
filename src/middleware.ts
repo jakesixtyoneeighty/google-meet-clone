@@ -7,7 +7,6 @@ const isPublicRoute = createRouteMatcher([
     '/sign-up(.*)',
     '/api/webhooks(.*)',
     '/api/chat-assistant(.*)',  // Mojo AI webhook
-    '/api/setup-mojo(.*)',      // Mojo setup endpoint
 ]);
 
 export default clerkMiddleware(async (auth, req) => {

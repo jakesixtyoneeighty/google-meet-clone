@@ -248,7 +248,24 @@ async function sendTypingIndicator(
 export async function POST(request: Request) {
     console.log('=== MOJO WEBHOOK RECEIVED ===');
     try {
-        const body = await request.json();
+        const bodyText = await request.text();
+        const signature = request.headers.get('x-signature');
+        
+        if (!signature) {
+             return NextResponse.json({ error: 'Missing signature' }, { status: 401 });
+        }
+
+        const chatClient = StreamChat.getInstance(STREAM_API_KEY, STREAM_API_SECRET);
+        // Verify webhook signature
+        // Note: verifyWebhook return type is boolean
+        const isValid = chatClient.verifyWebhook(bodyText, signature);
+        
+        if (!isValid) {
+            console.error('Invalid Stream webhook signature');
+            return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
+        }
+
+        const body = JSON.parse(bodyText);
         console.log('Webhook body:', JSON.stringify(body, null, 2));
 
         // Stream webhook payload structure

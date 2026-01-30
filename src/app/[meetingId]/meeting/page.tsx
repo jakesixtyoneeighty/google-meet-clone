@@ -42,14 +42,9 @@ import ToggleAudioButton from '@/components/ToggleAudioButton';
 import ToggleVideoButton from '@/components/ToggleVideoButton';
 import useTime from '@/hooks/useTime';
 
-interface MeetingProps {
-  params: Promise<{
-    meetingId: string;
-  }>;
-}
-
-const Meeting = ({ params }: MeetingProps) => {
-  const { meetingId } = use(params);
+const Meeting = () => {
+  const params = useParams();
+  const meetingId = params.meetingId as string;
   const audioRef = useRef<HTMLAudioElement>(null);
   const router = useRouter();
   const call = useCall();

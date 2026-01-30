@@ -58,15 +58,13 @@ const SpeakerLayout = () => {
           }
         >
           {call && participantInSpotlight && (
-            <ParticipantView
+            <ParticipantTile
               participant={participantInSpotlight}
               trackType={
                 hasScreenShare(participantInSpotlight)
                   ? 'screenShareTrack'
                   : 'videoTrack'
               }
-              ParticipantViewUI={ParticipantViewUI}
-              VideoPlaceholder={VideoPlaceholder}
             />
           )}
         </div>

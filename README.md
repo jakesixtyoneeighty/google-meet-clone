@@ -19,7 +19,7 @@ A premium video broadcasting and conferencing application built for the modern w
 
 ## Prerequisites
 
-- **Node.js** (v18 or higher)
+- **Node.js** (v20 or higher)
 - **npm** or **yarn**
 - **Stream Account**: [Sign up for Stream](https://getstream.io/)
 - **Clerk Account**: [Sign up for Clerk](https://clerk.dev/)

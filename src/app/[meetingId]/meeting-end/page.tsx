@@ -7,18 +7,11 @@ import { CallingState, useCallStateHooks } from '@stream-io/video-react-sdk';
 import Button from '@/components/Button';
 import PlainButton from '@/components/PlainButton';
 
-interface MeetingEndProps {
-  params: Promise<{
-    meetingId: string;
-  }>;
-  searchParams: Promise<{
-    invalid?: string;
-  }>;
-}
-
-const MeetingEnd = ({ params, searchParams }: MeetingEndProps) => {
-  const { meetingId } = use(params);
-  const { invalid } = use(searchParams);
+const MeetingEnd = () => {
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const meetingId = params.meetingId as string;
+  const invalid = searchParams.get('invalid');
   const router = useRouter();
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();

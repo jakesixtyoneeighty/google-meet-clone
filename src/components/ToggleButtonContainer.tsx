@@ -18,7 +18,7 @@ const ToggleButtonContainer = ({
 
   const buttonRef = useClickOutside(() => {
     setIsOpen(false);
-  }, true) as MutableRefObject<HTMLDivElement>;
+  }, true) as MutableRefObject<HTMLButtonElement>;
 
   const toggleMenu = () => {
     setIsOpen((prev) => !prev);
@@ -35,9 +35,9 @@ const ToggleButtonContainer = ({
             <div className="flex items-center justify-between border-t border-nj-grey-800 pt-3">
               <div className="flex items-center gap-2">
                 {icons}
-                <div title="Settings" className="text-nj-grey-400 hover:text-white cursor-pointer p-2 rounded-lg hover:bg-nj-grey-800 transition-colors">
+                <button type="button" aria-label="Settings" title="Settings" className="text-nj-grey-400 hover:text-white cursor-pointer p-2 rounded-lg hover:bg-nj-grey-800 transition-colors">
                   <Settings size={20} />
-                </div>
+                </button>
               </div>
               <span className="text-[10px] font-bold uppercase tracking-widest text-nj-grey-500">Settings</span>
             </div>
@@ -45,13 +45,17 @@ const ToggleButtonContainer = ({
         </div>
       )}
       
-      <div
+      <button
+        type="button"
         ref={buttonRef}
         onClick={toggleMenu}
-        className="h-full px-2 flex items-center justify-center cursor-pointer text-nj-grey-400 hover:text-white transition-colors"
+        aria-label="Toggle menu"
+        aria-expanded={isOpen}
+        aria-haspopup="true"
+        className="h-full px-2 flex items-center justify-center cursor-pointer text-nj-grey-400 hover:text-white transition-colors focus:outline-none"
       >
         {isOpen ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
-      </div>
+      </button>
       
       <div className="h-full">
         {children}
