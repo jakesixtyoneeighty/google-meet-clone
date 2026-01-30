@@ -208,26 +208,32 @@ async function maybeReactToMessage(
 
 // Webhook handler
 export async function POST(request: Request) {
+    console.log('=== MOJO WEBHOOK RECEIVED ===');
     try {
         const body = await request.json();
+        console.log('Webhook body:', JSON.stringify(body, null, 2));
 
         // Stream webhook payload structure
         const { type, message, channel_type, channel_id, user } = body;
 
         // Only handle new messages
         if (type !== 'message.new') {
+            console.log('Ignoring non-message event:', type);
             return NextResponse.json({ received: true });
         }
 
         // Ignore messages from Mojo (prevent loops)
         if (user?.id === MOJO_USER_ID) {
+            console.log('Ignoring self-message from Mojo');
             return NextResponse.json({ received: true, ignored: 'self-message' });
         }
 
         const messageText = message?.text || '';
+        console.log('Message text:', messageText);
 
         // Check if message triggers Mojo
         if (!shouldTriggerMojo(messageText)) {
+            console.log('Message does not trigger Mojo');
             // Maybe react to the message anyway (random)
             if (message?.id) {
                 maybeReactToMessage(channel_type, channel_id, message.id).catch(() => { });
@@ -235,9 +241,14 @@ export async function POST(request: Request) {
             return NextResponse.json({ received: true, triggered: false });
         }
 
+        console.log('MOJO TRIGGERED! Processing...');
+
         // Extract the question
         const question = extractQuestion(messageText);
+        console.log('Extracted question:', question);
+
         if (!question) {
+            console.log('Empty question, sending default response');
             await sendMojoMessage(
                 channel_type,
                 channel_id,
@@ -249,15 +260,21 @@ export async function POST(request: Request) {
         // Check if we need web search
         let webContext = null;
         if (needsWebSearch(question) && getExaClient()) {
+            console.log('Performing web search...');
             webContext = await searchWeb(question);
+            console.log('Web search result:', webContext ? 'found' : 'none');
         }
 
         // Get AI response
+        console.log('Calling AI Gateway...');
         const userName = user?.name || 'Someone';
         const response = await getAIResponse(question, userName, webContext);
+        console.log('AI Response received:', response.substring(0, 100) + '...');
 
         // Send response
+        console.log('Sending message to channel:', channel_type, channel_id);
         await sendMojoMessage(channel_type, channel_id, response);
+        console.log('Message sent successfully!');
 
         return NextResponse.json({
             received: true,
@@ -265,6 +282,7 @@ export async function POST(request: Request) {
             webSearched: !!webContext,
         });
     } catch (error) {
+        console.error('=== MOJO ERROR ===');
         console.error('Chat assistant error:', error);
         return NextResponse.json(
             { error: 'Internal server error' },
@@ -272,3 +290,4 @@ export async function POST(request: Request) {
         );
     }
 }
+
