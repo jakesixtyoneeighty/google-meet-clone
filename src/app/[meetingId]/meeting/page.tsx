@@ -14,13 +14,13 @@ import {
 } from '@stream-io/video-react-sdk';
 import { Channel } from 'stream-chat';
 import { useChatContext } from 'stream-chat-react';
-import { 
-  PhoneOff, 
-  MessageSquare, 
-  Users, 
-  Info, 
-  ScreenShare, 
-  MoreVertical, 
+import {
+  PhoneOff,
+  MessageSquare,
+  Users,
+  Info,
+  ScreenShare,
+  MoreVertical,
   Smile,
   Mic,
   MicOff,
@@ -28,12 +28,14 @@ import {
   VideoOff,
   Type
 } from 'lucide-react';
+import { Bot } from 'lucide-react';
 
 import CallControlButton from '@/components/CallControlButton';
 import CallInfoButton from '@/components/CallInfoButton';
 import ChatPopup from '@/components/ChatPopup';
 import GridLayout from '@/components/GridLayout';
 import MeetingPopup from '@/components/MeetingPopup';
+import MojoPanel from '@/components/MojoPanel';
 import RecordingsPopup from '@/components/RecordingsPopup';
 import SpeakerLayout from '@/components/SpeakerLayout';
 import ToggleAudioButton from '@/components/ToggleAudioButton';
@@ -62,10 +64,11 @@ const Meeting = ({ params }: MeetingProps) => {
 
   const [chatChannel, setChatChannel] = useState<Channel>();
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isMojoPanelOpen, setIsMojoPanelOpen] = useState(false);
   const [isRecordingListOpen, setIsRecordingListOpen] = useState(false);
   const [participantInSpotlight] = participants;
   const [prevParticipantsCount, setPrevParticipantsCount] = useState(0);
-  
+
   const isCreator = call?.state.createdBy?.id === user?.id;
   const isUnkownOrIdle =
     callingState === CallingState.UNKNOWN || callingState === CallingState.IDLE;
@@ -123,7 +126,7 @@ const Meeting = ({ params }: MeetingProps) => {
 
         {/* Bottom Control Bar */}
         <div className="absolute bottom-0 left-0 right-0 h-24 bg-nj-grey-950/90 backdrop-blur-xl border-t border-nj-grey-800 px-6 flex items-center justify-between z-10 shadow-premium">
-          
+
           {/* Left: Meeting Info */}
           <div className="hidden lg:flex items-center gap-4 w-1/4">
             <div className="flex flex-col">
@@ -136,17 +139,17 @@ const Meeting = ({ params }: MeetingProps) => {
           <div className="flex items-center gap-3 justify-center flex-1">
             <ToggleAudioButton />
             <ToggleVideoButton />
-            
+
             <div className="h-8 w-px bg-nj-grey-800 mx-1 hidden sm:block" />
-            
+
             <CallControlButton
               icon={<Type size={20} />}
               title={'Captions'}
               className="hidden sm:flex"
             />
-            
+
             <div className="relative group">
-               <CallControlButton
+              <CallControlButton
                 icon={<Smile size={20} />}
                 title={'Reactions'}
               />
@@ -163,7 +166,7 @@ const Meeting = ({ params }: MeetingProps) => {
               title={'Present'}
               active={!isSharingMute}
             />
-            
+
             <div className="h-10 w-10 flex items-center justify-center [&_button]:!bg-nj-grey-800 [&_button]:!rounded-full hover:[&_button]:!bg-nj-grey-700">
               <RecordCallButton />
             </div>
@@ -211,11 +214,26 @@ const Meeting = ({ params }: MeetingProps) => {
                 </div>
               )}
             </div>
+            <CallInfoButton
+              onClick={() => setIsMojoPanelOpen(!isMojoPanelOpen)}
+              icon={<Bot size={20} />}
+              title="Mojo"
+              active={isMojoPanelOpen}
+            />
           </div>
         </div>
 
         {isCreator && <MeetingPopup />}
-        
+
+        {/* Mojo Side Panel */}
+        {chatChannel && (
+          <MojoPanel
+            isOpen={isMojoPanelOpen}
+            onClose={() => setIsMojoPanelOpen(false)}
+            channel={chatChannel}
+          />
+        )}
+
         <audio
           ref={audioRef}
           src="https://www.gstatic.com/meet/sounds/join_call_6a6a67d6bcc7a4e373ed40fdeff3930a.ogg"
