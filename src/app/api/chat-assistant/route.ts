@@ -27,6 +27,24 @@ function getExaClient(): Exa | null {
     return EXA_API_KEY ? new Exa(EXA_API_KEY) : null;
 }
 
+// Simple deduplication - track processed message IDs
+// Note: This works per-instance, so some dupes may slip through in serverless
+const processedMessages = new Set<string>();
+const MAX_CACHE_SIZE = 1000;
+
+function hasProcessedMessage(messageId: string): boolean {
+    return processedMessages.has(messageId);
+}
+
+function markMessageProcessed(messageId: string): void {
+    // Prevent memory leak by limiting cache size
+    if (processedMessages.size >= MAX_CACHE_SIZE) {
+        const firstKey = processedMessages.values().next().value;
+        if (firstKey) processedMessages.delete(firstKey);
+    }
+    processedMessages.add(messageId);
+}
+
 // Mojo's system prompt - can be customized
 const MOJO_SYSTEM_PROMPT = `SYSTEM INSTRUCTION: PERSONA ADOPTION PROTOCOL — SUBJECT: MOJO (ASSISTANT-PARTICIPANT HYBRID)
 1. IDENTITY AND CORE DISPOSITION
@@ -206,6 +224,26 @@ async function maybeReactToMessage(
     }
 }
 
+// Send typing indicator to show Mojo is working
+async function sendTypingIndicator(
+    channelType: string,
+    channelId: string
+): Promise<void> {
+    try {
+        const chatClient = StreamChat.getInstance(STREAM_API_KEY, STREAM_API_SECRET);
+        const token = chatClient.createToken(MOJO_USER_ID);
+        await chatClient.connectUser({ id: MOJO_USER_ID, name: 'Mojo' }, token);
+
+        const channel = chatClient.channel(channelType, channelId);
+        await channel.watch();
+        await channel.keystroke();
+
+        await chatClient.disconnectUser();
+    } catch (error) {
+        console.error('Failed to send typing indicator:', error);
+    }
+}
+
 // Webhook handler
 export async function POST(request: Request) {
     console.log('=== MOJO WEBHOOK RECEIVED ===');
@@ -226,6 +264,16 @@ export async function POST(request: Request) {
         if (user?.id === MOJO_USER_ID) {
             console.log('Ignoring self-message from Mojo');
             return NextResponse.json({ received: true, ignored: 'self-message' });
+        }
+
+        // Deduplicate - prevent multiple responses to same message
+        const messageId = message?.id;
+        if (messageId && hasProcessedMessage(messageId)) {
+            console.log('Message already processed:', messageId);
+            return NextResponse.json({ received: true, ignored: 'duplicate' });
+        }
+        if (messageId) {
+            markMessageProcessed(messageId);
         }
 
         const messageText = message?.text || '';
@@ -264,6 +312,10 @@ export async function POST(request: Request) {
             webContext = await searchWeb(question);
             console.log('Web search result:', webContext ? 'found' : 'none');
         }
+
+        // Show typing indicator while processing
+        console.log('Sending typing indicator...');
+        await sendTypingIndicator(channel_type, channel_id);
 
         // Get AI response
         console.log('Calling AI Gateway...');
