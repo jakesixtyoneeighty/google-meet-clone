@@ -15,6 +15,7 @@ import clsx from 'clsx';
 import ParticipantViewUI from './ParticipantViewUI';
 import useAnimateVideoLayout from '../hooks/useAnimateVideoLayout';
 import VideoPlaceholder from './VideoPlaceholder';
+import ParticipantTile from './ParticipantTile';
 
 const GROUP_SIZE = 6;
 

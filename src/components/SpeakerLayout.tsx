@@ -14,6 +14,7 @@ import {
 import ParticipantViewUI from './ParticipantViewUI';
 import useAnimateVideoLayout from '../hooks/useAnimateVideoLayout';
 import VideoPlaceholder from './VideoPlaceholder';
+import ParticipantTile from './ParticipantTile';
 
 const SpeakerLayout = () => {
   const call = useCall();
