@@ -97,7 +97,10 @@ const MeetProvider = ({ meetingId, children }: MeetProviderProps) => {
 
     return () => {
       isCancelled = true;
-      call.leave().catch(console.error);
+      // Only leave if the call is in a joined state
+      if (call.state.callingState === 'joined') {
+        call.leave().catch(console.error);
+      }
       _videoClient.disconnectUser();
       _chatClient.disconnectUser();
     };

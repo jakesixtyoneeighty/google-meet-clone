@@ -18,11 +18,9 @@ import {
   PhoneOff,
   MessageSquare,
   Users,
-  Info,
   ScreenShare,
   MoreVertical,
-  Smile,
-  Type
+  Smile
 } from 'lucide-react';
 
 import CallControlButton from '@/components/CallControlButton';
@@ -130,12 +128,6 @@ const Meeting = () => {
 
             <div className="h-8 w-px bg-nj-grey-800 mx-1 hidden sm:block" />
 
-            <CallControlButton
-              icon={<Type size={20} />}
-              title={'Captions'}
-              className="hidden sm:flex"
-            />
-
             <div className="relative group">
               <CallControlButton
                 icon={<Smile size={20} />}
@@ -183,7 +175,6 @@ const Meeting = () => {
 
           {/* Right: Side Panels */}
           <div className="hidden lg:flex items-center justify-end gap-2 w-1/4">
-            <CallInfoButton icon={<Info size={20} />} title="Details" />
             <CallInfoButton icon={<Users size={20} />} title="People" />
             <CallInfoButton
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
