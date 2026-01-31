@@ -11,7 +11,7 @@ import {
 } from '@stream-io/video-react-sdk';
 import Image from 'next/image';
 import clsx from 'clsx';
-import { Video, Keyboard, Plus } from 'lucide-react';
+import { Video, Keyboard, Plus, Bot, AlertTriangle } from 'lucide-react';
 
 import { API_KEY, CALL_TYPE } from '@/contexts/MeetProvider';
 import { usePermissions } from '@/hooks/usePermissions';
@@ -61,7 +61,7 @@ const Home = () => {
         },
         body: JSON.stringify({ meetingId: code }),
       });
-      
+
       const data = await response.json();
 
       if (data.exists) {
@@ -94,7 +94,7 @@ const Home = () => {
               </h1>
               <p className="text-xl text-nj-grey-400 max-w-lg leading-relaxed">
                 NakedJake Live is a small, independent streaming space for casual nudist hangouts.
-Music, tech, conversations, life, experiments — whatever’s happening right now.
+                Music, tech, conversations, life, experiments — whatever’s happening right now.
               </p>
             </div>
 
@@ -168,6 +168,42 @@ Music, tech, conversations, life, experiments — whatever’s happening right n
               <div className="absolute bottom-6 left-6 right-6 glass-card p-6 bg-black/60 border-white/10 backdrop-blur-md">
                 <h3 className="text-xl font-bold mb-1 text-white tracking-tight">Chill hangs. Naked people.</h3>
                 <p className="text-sm text-nj-grey-300">A relaxed space for nudist meetups and real conversations.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Meet Mojo Section */}
+        <div className="mt-24 w-full max-w-4xl mx-auto">
+          <div className="glass-card p-8 border-purple-500/30 bg-gradient-to-br from-purple-900/20 to-pink-900/20">
+            <div className="flex items-start gap-6">
+              <div className="flex-shrink-0">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+                  <Bot size={32} className="text-white" />
+                </div>
+              </div>
+              <div className="flex-1">
+                <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-3">
+                  Meet Mojo
+                  <span className="text-xs font-medium px-2 py-1 rounded-full bg-purple-500/30 text-purple-300 uppercase tracking-wider">AI Assistant</span>
+                </h2>
+                <p className="text-nj-grey-300 mb-4 leading-relaxed">
+                  Mojo is our in-stream AI assistant. During live sessions, just type <code className="bg-nj-grey-800 px-2 py-0.5 rounded text-purple-300">@mojo</code> followed by any question and he'll jump in to help — whether it's answering questions, looking up info, or just adding to the chaos.
+                </p>
+
+                <div className="flex items-start gap-3 p-4 rounded-lg bg-amber-500/10 border border-amber-500/30 mb-4">
+                  <AlertTriangle size={20} className="text-amber-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-amber-200 font-medium text-sm mb-1">Heads up: Mojo has a mouth on him</p>
+                    <p className="text-amber-300/70 text-sm">
+                      He's sarcastic, uses profanity, and loves roasting Jake. It's all in good fun — that's just his personality. If you're easily offended by colorful language, Mojo might not be your cup of tea.
+                    </p>
+                  </div>
+                </div>
+
+                <p className="text-nj-grey-500 text-sm">
+                  Look, we get it — nudity is fine but swearing offends some people. Different strokes. Just know what you're getting into. 🤷
+                </p>
               </div>
             </div>
           </div>
