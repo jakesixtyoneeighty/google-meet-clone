@@ -34,11 +34,11 @@ const useAnimateVideoLayout = (isSpeakerLayout: boolean) => {
       let container = (
         isSpeakerLayout
           ? ref.current!.querySelector(
-              '.str-video__speaker-layout__participants-bar'
-            )
+            '.str-video__speaker-layout__participants-bar'
+          )
           : ref.current!.querySelector(
-              '.str-video__paginated-grid-layout__group'
-            )
+            '.str-video__paginated-grid-layout__group'
+          )
       ) as HTMLElement;
 
       const animateItems = contextSafe!(() => {
@@ -198,7 +198,6 @@ const useAnimateVideoLayout = (isSpeakerLayout: boolean) => {
 
       // Cleanup observer on unmount
       return () => {
-        if (rafId) cancelAnimationFrame(rafId);
         if (container) {
           observer.disconnect();
         }
