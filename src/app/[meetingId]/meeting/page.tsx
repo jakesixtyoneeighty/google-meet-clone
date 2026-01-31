@@ -32,10 +32,9 @@ import { Bot } from 'lucide-react';
 
 import CallControlButton from '@/components/CallControlButton';
 import CallInfoButton from '@/components/CallInfoButton';
-import ChatPopup from '@/components/ChatPopup';
+import ChatSidebar from '@/components/ChatSidebar';
 import GridLayout from '@/components/GridLayout';
 import MeetingPopup from '@/components/MeetingPopup';
-import MojoPanel from '@/components/MojoPanel';
 import RecordingsPopup from '@/components/RecordingsPopup';
 import SpeakerLayout from '@/components/SpeakerLayout';
 import ToggleAudioButton from '@/components/ToggleAudioButton';
@@ -58,8 +57,8 @@ const Meeting = () => {
   const callingState = useCallCallingState();
 
   const [chatChannel, setChatChannel] = useState<Channel>();
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isMojoPanelOpen, setIsMojoPanelOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [sidebarTab, setSidebarTab] = useState<'chat' | 'mojo'>('chat');
   const [isRecordingListOpen, setIsRecordingListOpen] = useState(false);
   const [participantInSpotlight] = participants;
   const [prevParticipantsCount, setPrevParticipantsCount] = useState(0);
@@ -192,40 +191,30 @@ const Meeting = () => {
           <div className="hidden lg:flex items-center justify-end gap-2 w-1/4">
             <CallInfoButton icon={<Info size={20} />} title="Details" />
             <CallInfoButton icon={<Users size={20} />} title="People" />
-            <div className="relative">
-              <CallInfoButton
-                onClick={() => setIsChatOpen(!isChatOpen)}
-                icon={<MessageSquare size={20} />}
-                title="Chat"
-                active={isChatOpen}
-              />
-              {isChatOpen && (
-                <div className="absolute bottom-full right-0 mb-6 w-96 z-50">
-                  <ChatPopup
-                    channel={chatChannel!}
-                    isOpen={isChatOpen}
-                    onClose={() => setIsChatOpen(false)}
-                  />
-                </div>
-              )}
-            </div>
             <CallInfoButton
-              onClick={() => setIsMojoPanelOpen(!isMojoPanelOpen)}
+              onClick={() => { setSidebarTab('chat'); setIsSidebarOpen(!isSidebarOpen); }}
+              icon={<MessageSquare size={20} />}
+              title="Chat"
+              active={isSidebarOpen && sidebarTab === 'chat'}
+            />
+            <CallInfoButton
+              onClick={() => { setSidebarTab('mojo'); setIsSidebarOpen(!isSidebarOpen); }}
               icon={<Bot size={20} />}
               title="Mojo"
-              active={isMojoPanelOpen}
+              active={isSidebarOpen && sidebarTab === 'mojo'}
             />
           </div>
         </div>
 
         {isCreator && <MeetingPopup />}
 
-        {/* Mojo Side Panel */}
+        {/* Chat Sidebar */}
         {chatChannel && (
-          <MojoPanel
-            isOpen={isMojoPanelOpen}
-            onClose={() => setIsMojoPanelOpen(false)}
+          <ChatSidebar
+            isOpen={isSidebarOpen}
+            onClose={() => setIsSidebarOpen(false)}
             channel={chatChannel}
+            defaultTab={sidebarTab}
           />
         )}
 
