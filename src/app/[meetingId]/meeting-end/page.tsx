@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState, use } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { CallingState, useCallStateHooks } from '@stream-io/video-react-sdk';
 
 import Button from '@/components/Button';
