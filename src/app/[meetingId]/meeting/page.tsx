@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useMemo, useRef, useState, use } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import {
   CallingState,
   hasScreenShare,
