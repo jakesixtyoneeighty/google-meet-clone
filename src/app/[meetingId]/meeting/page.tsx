@@ -22,13 +22,8 @@ import {
   ScreenShare,
   MoreVertical,
   Smile,
-  Mic,
-  MicOff,
-  Video,
-  VideoOff,
   Type
 } from 'lucide-react';
-import { Bot } from 'lucide-react';
 
 import CallControlButton from '@/components/CallControlButton';
 import CallInfoButton from '@/components/CallInfoButton';
@@ -58,7 +53,6 @@ const Meeting = () => {
 
   const [chatChannel, setChatChannel] = useState<Channel>();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [sidebarTab, setSidebarTab] = useState<'chat' | 'mojo'>('chat');
   const [isRecordingListOpen, setIsRecordingListOpen] = useState(false);
   const [participantInSpotlight] = participants;
   const [prevParticipantsCount, setPrevParticipantsCount] = useState(0);
@@ -192,16 +186,10 @@ const Meeting = () => {
             <CallInfoButton icon={<Info size={20} />} title="Details" />
             <CallInfoButton icon={<Users size={20} />} title="People" />
             <CallInfoButton
-              onClick={() => { setSidebarTab('chat'); setIsSidebarOpen(!isSidebarOpen); }}
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               icon={<MessageSquare size={20} />}
               title="Chat"
-              active={isSidebarOpen && sidebarTab === 'chat'}
-            />
-            <CallInfoButton
-              onClick={() => { setSidebarTab('mojo'); setIsSidebarOpen(!isSidebarOpen); }}
-              icon={<Bot size={20} />}
-              title="Mojo"
-              active={isSidebarOpen && sidebarTab === 'mojo'}
+              active={isSidebarOpen}
             />
           </div>
         </div>
@@ -214,7 +202,6 @@ const Meeting = () => {
             isOpen={isSidebarOpen}
             onClose={() => setIsSidebarOpen(false)}
             channel={chatChannel}
-            defaultTab={sidebarTab}
           />
         )}
 
